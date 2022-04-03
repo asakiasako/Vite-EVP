@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = "The backend RPC server of Vite-EVP structure."
+license = "GPL-3.0-or-later"
+authors = ["Chongjun Lei <chongjun.lei@neophotonics.com>"]
+packages = [
+    { include = "./scripts.py" },
+]
+
+[tool.poetry.scripts]
+build = 'scripts:build'
+
+[tool.poetry.dependencies]
+python = ">=3.8.10,<3.11"
+msgpack = "^1.0.3"
+grpcio = "^1.45.0"
+protobuf = "^3.19.4"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+pyinstaller = "^4.10"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
