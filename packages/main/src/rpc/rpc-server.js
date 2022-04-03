@@ -4,7 +4,6 @@
 import { spawn, execFile } from 'child_process'
 
 import { dialog } from 'electron'
-import electronLog from 'electron-log'
 
 import { PYTHON_PATH, PROCESS_PATH } from './config'
 
@@ -48,7 +47,6 @@ export class RpcServer {
         (err) => {
           if (err) {
             dialog.showErrorBox('RPC Server Crashed', `${err}`)
-            electronLog.error(err)
           }
         }
       )
