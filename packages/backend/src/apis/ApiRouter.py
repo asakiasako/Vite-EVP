@@ -10,7 +10,7 @@ class ApiRouteError(Exception):
 
 class ApiRouter:
     """
-    Manage API register and route. ApiRoute is singleten so it can be 
+    Manage API register and route. ApiRoute is singleton so it can be 
     instantiated in different modules safely.
     """
     __instance = None
