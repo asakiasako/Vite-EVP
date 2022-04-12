@@ -21,16 +21,46 @@ export const registerListeners = function () {
     dialog.showErrorBox(title, content)
   })
 
-  ipcMain.handle('rpcClient.waitForReady', (e, timeout) => {
-    return getRpcClient().waitForReady(timeout)
+  ipcMain.handle('rpcClient.waitForReady', async (event, timeout) => {
+    try {
+      return { result: await getRpcClient().waitForReady(timeout) }
+    } catch (err) {
+      return {
+        error: {
+          name: err.name,
+          message: err.message,
+          extra: { ...err }
+        }
+      }
+    }
   })
 
-  ipcMain.handle('rpcClient.listApis', (e, timeout) => {
-    return getRpcClient().listApis(timeout)
+  ipcMain.handle('rpcClient.listApis', async (event, timeout) => {
+    try {
+      return { result: await getRpcClient().listApis(timeout) }
+    } catch (err) {
+      return {
+        error: {
+          name: err.name,
+          message: err.message,
+          extra: { ...err }
+        }
+      }
+    }
   })
 
-  ipcMain.handle('rpcClient.request', (e, options, timeout) => {
-    return getRpcClient().request(options, timeout)
+  ipcMain.handle('rpcClient.request', async (event, options, timeout) => {
+    try {
+      return { result: await getRpcClient().request(options, timeout) }
+    } catch (err) {
+      return {
+        error: {
+          name: err.name,
+          message: err.message,
+          extra: { ...err }
+        }
+      }
+    }
   })
 }
 

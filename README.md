@@ -89,9 +89,9 @@ router.register_from_map(ROUTES)
 
 ### Invoke API in electron
 
-In electron, an `rpcClient` object is used to invoke those APIs. `rpcClient` is in Main Process and exposed to Renderer Process with `preload.js`.
+In electron renderer process, an `rpcClient` object is used to invoke those APIs.
 
-An alias `$rpcClient` is registered as a global property of the Vue app. So you can use it like this in Vue component with options API:
+An alias `$rpcClient` is registered as a global property of the Vue app. So you can use it like this in Vue components with options API:
 
 ``` js
 this.$rpcClient.request({
@@ -101,21 +101,22 @@ this.$rpcClient.request({
 }, timeout) // optional timeout parameter to change the default timeout
 ```
 
-With composition API, you can use `window.rpcClient`, or use inject method:
+With composition API, you can import `rpcClient`, or use inject method:
 
 ``` js
-window.rpcClient.request(...)
+import rpcClient from '@/rpc-client'
+rpcClient.request(...)
 // or
 const that = inject('app.globals')
 that.$rpcClient.request(...)
 ```
 
-Please refer to `/packages/main/src/rpc/rpc-client.js` for the `RpcClient` object.
+Please refer to `/packages/renderer/src/rpc-client/` for the `rpcClient` object.
 
 ## Global Properties
 
 ``` js
-app.config.globalProperties.$rpcClient = window.rpcClient
+app.config.globalProperties.$rpcClient = rpcClient
 app.config.globalProperties.$lodash = lodash
 ```
 

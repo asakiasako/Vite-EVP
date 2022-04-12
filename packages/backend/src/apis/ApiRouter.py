@@ -25,7 +25,7 @@ class ApiRouter:
 
     def __check_route_format(self, route):
         if not isinstance(route, str):
-            raise TypeError('parameter route should be str')
+            raise TypeError('Parameter route must be str type.')
 
     def list_apis(self) -> List:
         """
@@ -55,9 +55,9 @@ class ApiRouter:
         """
         self.__check_route_format(route)
         if not callable(method):
-            raise TypeError('parameter method should be callable')
+            raise TypeError('Parameter method must be callable type.')
         if route in self.mapping:
-            raise KeyError('route {} has already been registered. you should delete it before re-register.')
+            raise KeyError('The route name {!r} has already been registered.'.format(route))
         self.__mapping[route] = method
 
     def delete(self, route: str) -> None:
@@ -88,6 +88,6 @@ class ApiRouter:
         try:
             _method = self.mapping[route]
         except KeyError:
-            raise ApiRouteError('route does not exist: {}'.format(route))
+            raise ApiRouteError('The requested API route does not exist: "{}"'.format(route))
         reply = _method(*args, **kwargs)
         return reply

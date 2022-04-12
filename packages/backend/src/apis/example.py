@@ -13,6 +13,7 @@ def get_current_time() -> str:
 
 # --- Example 2: register an API with method
 def get_python_info() -> str:
+    raise ValueError('ABCdef')
     return {
         'Python Version': platform.python_version(),
         'Architecture': ", ".join(platform.architecture()),

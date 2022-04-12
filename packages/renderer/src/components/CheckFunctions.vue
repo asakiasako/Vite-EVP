@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue'
+import { rpcClient } from '@/rpc-client'
 
 const appVersion = ref()
 const appName = ref()
@@ -20,13 +21,12 @@ async function appInfo () {
   visibleState.ipc = true
 }
 
-function backendInfo () {
-  window.rpcClient.request({
+async function backendInfo () {
+  const res = await rpcClient.request({
     route: ':get-python-info'
-  }).then(res => {
-    pyInfo.value = res
-    visibleState.backend = true
   })
+  pyInfo.value = res
+  visibleState.backend = true
 }
 </script>
 
@@ -59,7 +59,6 @@ function backendInfo () {
 
   <a-modal v-model:visible="visibleState.backend" title="Python Backend">
     <p>RPC Server in Python is working properly.</p>
-    <p>NOT IMPLEMENTED</p>
     <a-descriptions title="Python Information" :column="1">
       <a-descriptions-item v-for="(item, key) in pyInfo" :key="key" :label="key">{{item}}</a-descriptions-item>
     </a-descriptions>

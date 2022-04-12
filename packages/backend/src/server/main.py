@@ -11,7 +11,7 @@ from concurrent import futures
 
 from . import rpc_pb2
 from . import rpc_pb2_grpc
-from apis import ApiRouter
+from apis import ApiRouter, ApiRouteError
 
 MAX_MESSAGE_LENGTH = 10*1024*1024  # grpc default is 4M, extend to 10M
 
@@ -28,10 +28,18 @@ class RPCServicer(rpc_pb2_grpc.ServiceRPCServicer):
             reply = self.__router.invoke_api(route, args=args or [], kwargs=kwargs or {})
             bytesReply = msgpack.packb(reply)
         except Exception as e:
+            if isinstance(e, ApiRouteError):
+                statusCode = grpc.StatusCode.UNIMPLEMENTED
+            elif isinstance(e, (ValueError, TypeError)):
+                statusCode = grpc.StatusCode.INVALID_ARGUMENT
+            elif isinstance(e, PermissionError):
+                statusCode = grpc.StatusCode.PERMISSION_DENIED
+            else:
+                statusCode = grpc.StatusCode.UNKNOWN
             err_msg = type(e).__name__
             if e.args:
                 err_msg += ': {desc}'.format(desc=e.args[0])
-            context.abort(grpc.StatusCode.UNKNOWN, err_msg)
+            context.abort(statusCode, err_msg)
         return rpc_pb2.ApiResponse(replyData=bytesReply)
 
     def listApis(self, request, context):
